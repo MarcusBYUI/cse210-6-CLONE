@@ -10,7 +10,7 @@ from game.services.video_service import VideoService
 class RaylibVideoService(VideoService):
     """ A Raylib implementation of VideoService."""
 
-    def __init__(self, title = "", width = 640, height = 480, color = BLACK):
+    def __init__(self, title = "", width = 700, height = 1000, color = LIME):
         self._title = title
         self._width = width
         self._height = height
@@ -22,6 +22,21 @@ class RaylibVideoService(VideoService):
         raylib_color = self._to_raylib_color(self._color)
         pyray.begin_drawing()
         pyray.clear_background(raylib_color)
+        self._draw_road()
+
+    def _draw_road(self):
+        """Draws a scene on the screen."""
+        #Draw the river
+        pyray.draw_rectangle(0,MAX_Y-880, MAX_X, 350, pyray.BLUE) 
+
+        #Draw the median strip
+        pyray.draw_rectangle(0,MAX_Y-606, MAX_X, 80, pyray.LIME)
+
+        # Draw the Road
+        pyray.draw_rectangle(0,MAX_Y-522, MAX_X, 396, pyray.GRAY)  
+
+        # Draw the Grass Start area
+        pyray.draw_rectangle(0,MAX_Y-122, MAX_X, 122, pyray.LIME) 
 
     def draw_image(self, image, position):
         filepath = image.get_filename()
@@ -73,7 +88,7 @@ class RaylibVideoService(VideoService):
         pyray.end_drawing()
 
     def initialize(self):
-        pyray.set_target_fps(60)
+        pyray.set_target_fps(20)
         pyray.init_window(self._width, self._height, self._title)
 
     def is_window_open(self):

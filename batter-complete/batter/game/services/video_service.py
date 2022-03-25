@@ -10,8 +10,8 @@ class VideoService:
         on the screen until flush_buffer() is called.
 
         Args:
-            image: An instance of batter.casting.image.
-            position: An instance of batter.casting.point.
+            image: An instance of chicken.casting.image.
+            position: An instance of chicken.casting.point.
 
         Raises:
             KeyError: If the image file hasn't already been loaded.
