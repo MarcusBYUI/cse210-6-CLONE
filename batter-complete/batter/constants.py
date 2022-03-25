@@ -5,8 +5,8 @@ from game.casting.color import Color
 # -------------------------------------------------------------------------------------------------- 
 
 # GAME
-GAME_NAME = "Batter"
-FRAME_RATE = 60
+GAME_NAME = "Chicken"
+FRAME_RATE = 8
 
 # SCREEN
 SCREEN_WIDTH = 1040
