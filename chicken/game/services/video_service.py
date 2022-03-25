@@ -91,12 +91,19 @@ class VideoService:
             pyray.draw_line(x, 0, x, MAX_Y, pyray.BLACK)
             
     def _draw_road(self):
-        """Draws a road on the screen."""
-        pyray.draw_rectangle(0,0, MAX_X, 40, pyray.BLACK)  
-        
-        pyray.draw_rectangle(0,MAX_Y-320, MAX_X, 125, pyray.BLACK)  
-        
-        pyray.draw_rectangle(0,MAX_Y-150, MAX_X, 120, pyray.BLACK)  
+        """Draws a scene on the screen."""
+        #Draw the river
+        pyray.draw_rectangle(0,MAX_Y-960, MAX_X, 350, pyray.BLUE) 
+
+        #Draw the median strip
+        pyray.draw_rectangle(0,MAX_Y-606, MAX_X, 80, pyray.LIME)
+
+        # Draw the Road
+        pyray.draw_rectangle(0,MAX_Y-522, MAX_X, 396, pyray.GRAY)  
+
+        # Draw the Grass Start area
+        pyray.draw_rectangle(0,MAX_Y-122, MAX_X, 122, pyray.LIME)
+        #pyray.Color[0, 191, 255])  
          
          
 

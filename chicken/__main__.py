@@ -26,16 +26,19 @@ def main():
     
     #car lane 1
     cast.add_actor("car", Car(2, CAR_LANE_ONE))
-    #car lane 1
+    #car lane 2
     cast.add_actor("car", Car(1, CAR_LANE_TWO))
-    #car lane 1
+    #car lane 3
     cast.add_actor("car", Car(3, CAR_LANE_THREE))
+    cast.add_actor("car", Car(4, CAR_LANE_FOUR))
+    cast.add_actor("car", Car(3, CAR_LANE_FIVE))
     
     #Water Log
+    cast.add_actor("log", Log(5, LOG_LANE_FIVE))
+    cast.add_actor("log", Log(4, LOG_LANE_FOUR))  
     cast.add_actor("log", Log(2, LOG_LANE_THREE))
     cast.add_actor("log", Log(1, LOG_LANE_TWO))
     cast.add_actor("log", Log(3, LOG_LANE_ONE))
-    
     
     
    

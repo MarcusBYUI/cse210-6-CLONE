@@ -13,7 +13,7 @@ class HandleLevelUp(Action):
     """
     An update action that handles interactions between the actors.
     
-    The responsibility of HandleCollisionsAction is to handle the situation when the cycles collide with their own segments, or the segments of it's opponent, or the game is over.
+    The responsibility of HandleCollisionsAction is to handle the situation when the chicken collides with cars or other harmful items, and the chicken loses a life.
 
     Attributes:
         _is_game_over (boolean): Whether or not the game is over.
@@ -76,16 +76,21 @@ class HandleLevelUp(Action):
         cast.remove_group("log")
         #car lane 1
         cast.add_actor("car", Car(2, CAR_LANE_ONE, next_level))
-        #car lane 1
+        #car lane 2
         cast.add_actor("car", Car(1, CAR_LANE_TWO, next_level))
-        #car lane 1
+        #car lane 3
         cast.add_actor("car", Car(3, CAR_LANE_THREE, next_level))
+        #car lane 4
+        cast.add_actor("car", Car(4, CAR_LANE_FOUR, next_level))
+        #car lane 5
+        cast.add_actor("car", Car(5, CAR_LANE_FIVE, next_level))
         
         #Water Log
         cast.add_actor("log", Log(2, LOG_LANE_THREE, next_level))
         cast.add_actor("log", Log(1, LOG_LANE_TWO, next_level))
         cast.add_actor("log", Log(3, LOG_LANE_ONE, next_level))
-        
+        cast.add_actor("log", Log(4, LOG_LANE_FOUR, next_level))
+        cast.add_actor("log", Log(5, LOG_LANE_FIVE, next_level))        
         self._level_up = False
         
         
