@@ -3,11 +3,17 @@ from game.casting.actor import Actor
 from game.casting.point import Point
 
 
-class Racket(Actor):
-    """A implement used to hit and bounce the ball in the game."""
+class Chicken(Actor):
+    """A character that hops across the road in the game. 
+    
+    The responsibility of Chicken is to move itself.
+
+    Attributes:
+        _points (int): The number of points the hop forward is worth.
+    """
     
     def __init__(self, body, animation, debug = False):
-        """Constructs a new Bat.
+        """Constructs a new Chicken.
         
         Args:Args:
             body: A new instance of Body.
@@ -19,7 +25,7 @@ class Racket(Actor):
         self._animation = animation
 
     def get_animation(self):
-        """Gets the bat's animation.
+        """Gets the chicken's animation.
         
         Returns:
             An instance of Animation.
@@ -27,7 +33,7 @@ class Racket(Actor):
         return self._animation
 
     def get_body(self):
-        """Gets the bat's body.
+        """Gets the chicken's body.
         
         Returns:
             An instance of Body.
@@ -35,23 +41,33 @@ class Racket(Actor):
         return self._body
 
     def move_next(self):
-        """Moves the bat using its velocity."""
+        """Moves the chicken using its velocity."""
         position = self._body.get_position()
         velocity = self._body.get_velocity()
         new_position = position.add(velocity)
         self._body.set_position(new_position)
 
-    def swing_left(self):
-        """Steers the bat to the left."""
-        velocity = Point(-RACKET_VELOCITY, 0)
+    def hop_up(self):
+        """Moves the chicken up."""
+        velocity = Point(0, -CHICKEN_VELOCITY)
+        self._body.set_velocity(velocity)
+
+    def hop_down(self):
+        """Moves the chicken down."""
+        velocity = Point(0, CHICKEN_VELOCITY)
+        self._body.set_velocity(velocity)
+
+    def hop_left(self):
+        """Steers the chicken to the left."""
+        velocity = Point(-CHICKEN_VELOCITY, 0)
         self._body.set_velocity(velocity)
         
-    def swing_right(self):
-        """Steers the bat to the right."""
-        velocity = Point(RACKET_VELOCITY, 0)
+    def hop_right(self):
+        """Steers the chicken to the right."""
+        velocity = Point(CHICKEN_VELOCITY, 0)
         self._body.set_velocity(velocity)
     
     def stop_moving(self):
-        """Stops the bat from moving."""
+        """Stops the chicken from moving."""
         velocity = Point(0, 0)
         self._body.set_velocity(velocity)
