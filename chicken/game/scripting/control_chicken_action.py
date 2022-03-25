@@ -55,7 +55,14 @@ class ControlChickenAction(Action):
         
         # up
         if self._keyboard_service.is_key_down('up'):
-            if chicken.get_position().get_y() <= MAX_Y - 350:
+            if chicken.get_position().get_y() <= MAX_Y - 960:
+                self._direction = Point(0, 0)               
+            else:
+                self._direction = Point(0, -CELL_SIZE)
+
+        # down
+        if self._keyboard_service.is_key_down('up'):
+            if chicken.get_position().get_y() <= MAX_Y - 960:
                 self._direction = Point(0, 0)               
             else:
                 self._direction = Point(0, -CELL_SIZE)
