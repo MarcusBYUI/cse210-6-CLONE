@@ -49,4 +49,5 @@ BRANCH = "chicken/assets/images/branch.png"
 CHICKEN_IMAGES = [f"chicken/assets/images/{n}.png" for n in range(1, 8)]
 CHICKEN_RATE = 1
 BOOM = "chicken/assets/images/boom.png"
+CHICKENS_LIVES = 10
 
