@@ -24,7 +24,11 @@ class Actor:
         self._font_size = 15
         self._color = Color(255, 255, 255)
         self._position = Point(0, 0)
+        self._end_position = Point(0, 0)
         self._velocity = Point(0, 0)
+        self._image = ""
+        self._size = ""
+        self._thickness = 0
 
     def get_color(self):
         """Gets the actor's color as a tuple of three ints (r, g, b).
@@ -118,3 +122,69 @@ class Actor:
             velocity (Point): The given velocity.
         """
         self._velocity = velocity
+        
+    def get_image(self):
+        """Gets the ball's image.
+        
+        Returns:
+            An instance of Image.
+        """
+        return self._image
+
+    def get_size(self):
+        """Gets the ball's image.
+        
+        Returns:
+            An instance of Image.
+        """
+        return self._size
+    
+    def set_image(self, image):
+        """Gets the ball's image.
+        
+        Returns:
+            An instance of Image.
+        """
+        self._image = image
+
+    def set_size(self, size):
+        """Gets the ball's image.
+        
+        Returns:
+            An instance of Image.
+        """
+        self._size = size
+        
+    def set_end_position(self, position):
+        """Updates the position to the given one.
+        
+        Args:
+            position (Point): The given position.
+        """
+        self._end_position = position
+        
+        
+    def get_end_position(self):
+        """Updates the position to the given one.
+        
+        Args:
+            position (Point): The given position.
+        """
+        return self._end_position
+    
+    def set_thickness(self, thickness):
+        """Updates the position to the given one.
+        
+        Args:
+            position (Point): The given position.
+        """
+        self._thickness = thickness
+        
+        
+    def get_thickness(self):
+        """Updates the position to the given one.
+        
+        Args:
+            position (Point): The given position.
+        """
+        return self._thickness

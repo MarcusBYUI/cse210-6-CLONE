@@ -3,10 +3,14 @@ from game.casting.actor import Actor
 from game.scripting.action import Action
 from game.shared.point import Point
 from game.services.keyboard_service import KeyboardService
-from game.scripting.handle_restart_action import HandleRestartAction
 from game.casting.car import Car
 from game.casting.log import Log
 from game.casting.lives import Lives
+from game.casting.image import Image
+from game.scripting.control_chicken_action import ControlChickenAction
+from random import *
+
+
 
 
 import time
@@ -24,9 +28,8 @@ class HandleCollisionsAction(Action):
     def __init__(self):
         """Constructs a new HandleCollisionsAction."""
         self._is_game_over = False
-        self._winner = "";
+        self._counter = 0
         self._keyboard_service = KeyboardService()
-        self._action = HandleRestartAction(self._keyboard_service)
     
         
 
@@ -114,7 +117,8 @@ class HandleCollisionsAction(Action):
         
             
             if self._is_game_over:
-                chicken.set_text("+")
+                animation = chicken.get_animation()
+                animation.set_boom(True)
                 
 
                 
@@ -124,8 +128,8 @@ class HandleCollisionsAction(Action):
         
         for log in log_list:
             
-            if chicken.get_position().get_y() == y and chicken.get_position().get_x() in range(log.get_position().get_x(), log.get_position().get_x()+60):
-                chicken.set_position(Point(log.get_position().get_x(), y))
+            if chicken.get_position().get_y() == y and chicken.get_position().get_x() in range(log.get_position().get_x()-10, log.get_position().get_x()+50):
+                chicken.set_position(Point(log.get_position().get_x() + 17, y))
                 self._is_game_over = False
                 if chicken.get_position().get_x() <= 0:
                     self._is_game_over = True
@@ -139,9 +143,10 @@ class HandleCollisionsAction(Action):
         
         for car in car_list:
             
-            if chicken.get_position().get_y() == y and chicken.get_position().get_x() in range(car.get_position().get_x() - 20, car.get_position().get_x() + 20):
+            if chicken.get_position().get_y() == y and chicken.get_position().get_x() in range(car.get_position().get_x() - 20, car.get_position().get_x() + 40):
                 self._is_game_over = True 
-                chicken.set_text("+")
+                animation = chicken.get_animation()
+                animation.set_boom(True)
                   
             
         
@@ -157,26 +162,28 @@ class HandleCollisionsAction(Action):
             cast (_type_): _description_
             script (_type_): _description_
         """
+        menu = cast.get_first_actor("menu")
         
         chicken = cast.get_first_actor("chicken")
+        chicken.set_position(Point(int(MAX_X/2), int(MAX_Y - 30)))
+        
+        if self._counter < 1:
+            time.sleep(3)
+            self._counter = 1
+        menu.set_draw(True)
         
         
-        car_rows = cast.get_actors("car")
-        for rows in car_rows:
-            rows.stop_cars()
-            for car in rows.get_cars():
-                car.set_color(Color(255, 255, 255))
-            
-        log_rows = cast.get_actors("log")
-        for rows in log_rows:
-            rows.stop_logs()
-            for log in rows.get_logs():
-                log.set_color(Color(255, 255, 255))
+        
+        
+
+
 
     
         #checks for input  
-        restart = script.get_last_action("input")       
-        if restart.get_restart():
+        if menu.restart_state():
+            animation = chicken.get_animation()
+            animation.set_boom(False)
+
             level = cast.get_first_actor("level")
             level.next_level()
             
@@ -190,33 +197,32 @@ class HandleCollisionsAction(Action):
             next_level = 1
             level.set_text(f"Level: {next_level}")
             
-            chicken = cast.get_first_actor("chicken")
-            chicken.set_position(Point(int(MAX_X/2), int(MAX_Y - 30)))
-            chicken.set_text("#")
+            
             
             
         
-            cast.remove_group("car")
-            cast.remove_group("log")
-            #car lane 1
-            cast.add_actor("car", Car(1, CAR_LANE_ONE, next_level))
-            #car lane 2
-            cast.add_actor("car", Car(2, CAR_LANE_TWO, next_level))
-            #car lane 3
-            cast.add_actor("car", Car(3, CAR_LANE_THREE, next_level))
-            #car lane 4
-            cast.add_actor("car", Car(4, CAR_LANE_FOUR, next_level))
-            #car lane 5
-            cast.add_actor("car", Car(5, CAR_LANE_FIVE, next_level))
+                        
+            car_rows = cast.get_actors("car")
+            for rows in car_rows:
+                rows.start_cars(randint(1,3))
+
             
-            #Water Log
-            cast.add_actor("log", Log(2, LOG_LANE_THREE, next_level))
-            cast.add_actor("log", Log(1, LOG_LANE_TWO, next_level))
-            cast.add_actor("log", Log(3, LOG_LANE_ONE, next_level))
-            cast.add_actor("log", Log(4, LOG_LANE_FOUR, next_level))
-            cast.add_actor("log", Log(5, LOG_LANE_FIVE, next_level))
+            log_rows = cast.get_actors("log")
+            for rows in log_rows:
+                rows.start_logs(randint(1,3))
             
-            self._action = HandleRestartAction(self._keyboard_service)
+            
+            
+            
+            
+            menu.set_draw(False)
+            menu.change_game_state(True)
+            menu.set_restart(False)
+            self._counter = 0
+            
+            
+           
+            
             
             
             self._is_game_over=False
@@ -236,24 +242,26 @@ class HandleCollisionsAction(Action):
 
         if self._is_game_over:
             
-            script.add_action("input", self._action)
-            
 
             
-            message = Actor()
-            x = int(MAX_X / 2)
-            y = int(10)
-            position = Point(x, y)
-            message.set_position(position)
             
+            # message.set_text("Game Over (Press Spacebar to Start again.)")
+            menu = cast.get_first_actor("menu")
+            #Adding the gameover text
+            menu.add_game_over()
             
-            message.set_text("Game Over (Press Spacebar to Start again.)")  
-            message.set_font_size = 20
+            car_rows = cast.get_actors("car")
+            for rows in car_rows:
+                rows.stop_cars()
+
             
+            log_rows = cast.get_actors("log")
+            for rows in log_rows:
+                rows.stop_logs()
             
-                
-            cast.add_actor("messages", message)                
-    
+  
+            
+
             self._is_game_over = True
 
 
@@ -292,9 +300,10 @@ class HandleCollisionsAction(Action):
         message = cast.get_last_actor("messages")
         message.set_text("")
         
-        chicken = cast.get_first_actor("chicken")         
+        chicken = cast.get_first_actor("chicken")
+        animation = chicken.get_animation()
+        animation.set_boom(False)         
         
-        chicken.set_text("#")
         
         chicken = cast.get_first_actor("chicken")
         if chicken.get_position().get_y() < 211:
@@ -303,4 +312,39 @@ class HandleCollisionsAction(Action):
         elif chicken.get_position().get_y() < 370:
             chicken.set_position(Point(int(MAX_X/2), int(MAX_Y - 30)))
         self._is_game_over=False
-        
+
+
+
+
+
+
+            # cast.remove_group("car")
+            # cast.remove_group("log")
+            # size = Point(28, 28)
+            
+            # #car images
+            # car_images = [Image(BLACK_TRUCK), Image(BLACK_CAR), Image(GREEN_CAR), Image(BLUE_CAR), Image(YELLOW_CAR), Image(RED_TRUCK)]
+            
+            # #car lane 1
+            # cast.add_actor("car", Car(2, CAR_LANE_ONE, car_images, size))
+            
+            # #car lane 2
+            # cast.add_actor("car", Car(1, CAR_LANE_TWO, car_images, size))
+            
+            # #car lane 3
+            # cast.add_actor("car", Car(3, CAR_LANE_THREE, car_images, size))
+            
+            
+            
+            # #Logs
+            # log_size = Point(35, 28)
+            
+            # #Log images
+            # log_images = [Image(LONG_PLANK), Image(PLANK), Image(BRANCH)]
+            
+            # #Water Log
+            # cast.add_actor("log", Log(2, LOG_LANE_THREE, log_images, log_size))
+            # cast.add_actor("log", Log(1, LOG_LANE_TWO, log_images, log_size))
+            # cast.add_actor("log", Log(3, LOG_LANE_ONE, log_images, log_size))
+            
+            # script.add_action("input", ControlChickenAction(self._keyboard_service))

@@ -11,7 +11,7 @@ class MoveCarAction(Action):
         self._move_car(cast)
 
     def _move_car(self, cast):
-        """Move the car along the road
+        """Add segments to grow the trail of the cycle.
         
         Args:
             cast (Cast): The cast of Actors in the game.

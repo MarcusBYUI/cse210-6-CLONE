@@ -1,5 +1,8 @@
+from distutils.log import debug
 import pyray
 from constants import *
+import pathlib
+import os
 
 
 
@@ -15,6 +18,8 @@ class VideoService:
             debug (bool): whether or not to draw in debug mode.
         """
         self._debug = debug
+        self._textures = {}
+        
 
     def close_window(self):
         """Closes the window and releases all computing resources."""
@@ -25,15 +30,15 @@ class VideoService:
         the beginning of the game's output phase.
         """
         pyray.begin_drawing()
-        pyray.clear_background([25,25,55])
-        self._draw_road()
+        pyray.clear_background(GREEN.to_tuple())
+
         
-        if self._debug == True:
+        if self._debug == debug:
             
             pass
             #self._draw_grid()
     
-    def draw_actor(self, actor, centered=False):
+    def draw_actor(self, actor, centered=False, menu=False):
         """Draws the given actor's text on the screen.
 
         Args:
@@ -49,7 +54,10 @@ class VideoService:
             width = pyray.measure_text(text, font_size)
             offset = int(width / 2)
             x -= offset
+            
         pyray.draw_text(text, x, y, font_size, color)
+        
+    
         
     def draw_actors(self, actors, centered=False):
         """Draws the text for the given list of actors on the screen.
@@ -90,24 +98,87 @@ class VideoService:
         for x in range(0, MAX_X, CELL_SIZE):
             pyray.draw_line(x, 0, x, MAX_Y, pyray.BLACK)
             
-    def _draw_road(self):
-        """Draws a scene on the screen."""
-        #Draw the river
-        pyray.draw_rectangle(0,MAX_Y-960, MAX_X, 350, pyray.BLUE) 
-
-        #Draw the median strip
-        pyray.draw_rectangle(0,MAX_Y-606, MAX_X, 80, pyray.LIME)
-
-        # Draw the Road
-        pyray.draw_rectangle(0,MAX_Y-522, MAX_X, 396, pyray.GRAY)  
-
-        # Draw the Grass Start area
-        pyray.draw_rectangle(0,MAX_Y-122, MAX_X, 122, pyray.LIME)
-        #pyray.Color[0, 191, 255])  
+ 
+        
+    def draw_shape(self, actor, lanes=False):
+        x1 = actor.get_position().get_x()
+        y1 = actor.get_position().get_y()
+        x2 = actor.get_end_position().get_x()
+        y2 = actor.get_end_position().get_y()
+        color = actor.get_color().to_tuple()
+        
+        pyray.draw_rectangle(x1, y1, x2, y2, color) 
+        
+        
+        if lanes:
+        #Draw lanes
+            for i in range(5, MAX_X, 35):
+                pyray.draw_line_ex(pyray.Vector2(i, MAX_Y-117), pyray.Vector2(i+10, MAX_Y-117), 4, pyray.WHITE); 
+                pyray.draw_line_ex(pyray.Vector2(i, MAX_Y-77), pyray.Vector2(i+10, MAX_Y-77), 4, pyray.WHITE); 
          
          
+    def draw_menu(self, actors):
+        """Draws the given actor's text on the screen.
 
+        Args:
+            actor (Actor): The actor to draw.
+        """ 
+        pyray.draw_rectangle(0,0, MAX_X, MAX_Y, pyray.BLACK) 
+        for actor in actors:
+            self.draw_actor(actor)
+
+        
+        
     
     def _get_x_offset(self, text, font_size):
         width = pyray.measure_text(text, font_size)
         return int(width / 2)
+    
+    
+    def draw_image(self, image, position, menu=False):
+        filepath = image.get_filename()
+        texture = self._textures[filepath]
+        x = position.get_x()
+        if menu:
+            y = position.get_y() - 50
+        else:
+            y = position.get_y()
+        raylib_position = pyray.Vector2(x, y)
+        scale = image.get_scale()
+        rotation = image.get_rotation()
+        tint = self._to_raylib_color(Color(255,255,255)) 
+        pyray.draw_texture_ex(texture, raylib_position, rotation, scale, tint)
+        
+    def draw_images(self, actors, centered=False):
+        """Draws the text for the given list of actors on the screen.
+
+        Args:
+            actors (list): A list of actors to draw.
+        """ 
+        for actor in actors:
+            self.draw_image(actor.get_image(), actor.get_position())
+        
+    def _to_raylib_color(self, color):
+        r, g, b, a = color.to_tuple()
+        return pyray.Color(r, g, b, a)
+    
+    def load_images(self, directory):
+        filepaths = self._get_filepaths(directory, [".png", ".gif", ".jpg", ".jpeg", ".bmp"])
+        for filepath in filepaths:
+            if filepath not in self._textures.keys():
+                texture = pyray.load_texture(filepath)
+                self._textures[filepath] = texture
+                
+    def _get_filepaths(self, directory, filter):
+        filepaths = []
+        for file in os.listdir(directory):
+            filename = directory + '/' + file
+            extension = pathlib.Path(filename).suffix.lower()
+            if extension in filter:
+                filepaths.append(filename)
+        return filepaths  
+    
+    def unload_images(self):
+        for texture in self._textures.values():
+            pyray.unload_texture(texture)
+        self._textures.clear()
