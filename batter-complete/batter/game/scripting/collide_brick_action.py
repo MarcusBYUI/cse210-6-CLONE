@@ -10,16 +10,16 @@ class CollideBrickAction(Action):
         self._audio_service = audio_service
         
     def execute(self, cast, script, callback):
-        ball = cast.get_first_actor(BALL_GROUP)
+        chicken = cast.get_first_actor(CHICKEN_GROUP)
         bricks = cast.get_actors(BRICK_GROUP)
         stats = cast.get_first_actor(STATS_GROUP)
         
         for brick in bricks:
-            ball_body = ball.get_body()
+            chicken_body = chicken.get_body()
             brick_body = brick.get_body()
 
-            if self._physics_service.has_collided(ball_body, brick_body):
-                ball.bounce_y()
+            if self._physics_service.has_collided(chicken_body, brick_body):
+                chicken.bounce_y()
                 sound = Sound(BOUNCE_SOUND)
                 self._audio_service.play_sound(sound)
                 points = brick.get_points()

@@ -10,13 +10,13 @@ class CollideChickenAction(Action):
         self._audio_service = audio_service
         
     def execute(self, cast, script, callback):
-        ball = cast.get_first_actor(BALL_GROUP)
+        chicken = cast.get_first_actor(CHICKEN_GROUP)
         chicken = cast.get_first_actor(CHICKEN_GROUP)
         
-        ball_body = ball.get_body()
+        chicken_body = chicken.get_body()
         chicken_body = chicken.get_body()
 
-        if self._physics_service.has_collided(ball_body, chicken_body):
-            ball.bounce_y()
+        if self._physics_service.has_collided(chicken_body, chicken_body):
+            chicken.bounce_y()
             sound = Sound(BOUNCE_SOUND)
             self._audio_service.play_sound(sound)    

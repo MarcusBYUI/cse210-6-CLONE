@@ -10,8 +10,8 @@ class CollideBordersAction(Action):
         self._audio_service = audio_service    
         
     def execute(self, cast, script, callback):
-        ball = cast.get_first_actor(BALL_GROUP)
-        body = ball.get_body()
+        chicken = cast.get_first_actor(CHICKEN_GROUP)
+        body = chicken.get_body()
         position = body.get_position()
         x = position.get_x()
         y = position.get_y()
@@ -19,18 +19,18 @@ class CollideBordersAction(Action):
         over_sound = Sound(OVER_SOUND)
                 
         if x < FIELD_LEFT:
-            ball.bounce_x()
+            chicken.bounce_x()
             self._audio_service.play_sound(bounce_sound)
 
-        elif x >= (FIELD_RIGHT - BALL_WIDTH):
-            ball.bounce_x()
+        elif x >= (FIELD_RIGHT - CHICKEN_WIDTH):
+            chicken.bounce_x()
             self._audio_service.play_sound(bounce_sound)
 
         if y < FIELD_TOP:
-            ball.bounce_y()
+            chicken.bounce_y()
             self._audio_service.play_sound(bounce_sound)
 
-        elif y >= (FIELD_BOTTOM - BALL_WIDTH):
+        elif y >= (FIELD_BOTTOM - CHICKEN_WIDTH):
             stats = cast.get_first_actor(STATS_GROUP)
             stats.lose_life()
             
