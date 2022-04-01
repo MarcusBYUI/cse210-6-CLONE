@@ -43,6 +43,8 @@ class HandleCollisionsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
+        over_sound = Sound(OVER_SOUND)
+
         if not self._is_game_over:
 
             self._handle_collision(cast)
@@ -126,6 +128,7 @@ class HandleCollisionsAction(Action):
             if self._is_game_over:
                 animation = chicken.get_animation()
                 animation.set_boom(True)
+                self._audio_service.play_sound(over_sound)
                 
 
                 

@@ -93,10 +93,11 @@ def main():
     # start the game
     keyboard_service = KeyboardService() 
     video_service =  VideoService()
+    audio_service = RaylibAudioService()
 
     script = Script()
     
-    script.add_action("input", ControlChickenAction(keyboard_service))
+    script.add_action("input", ControlChickenAction(audio_service, keyboard_service))
     script.add_action("input", HandleRestartAction(keyboard_service))
     
     script.add_action("update", LoadAssetsAction(AUDIO_SERVICE, video_service)) 
