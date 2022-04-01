@@ -4,11 +4,12 @@ class Sound:
     The responsibility of Sound is keep track of the audio asset information.
     """
 
-    def __init__(self, filename, volume = 1, repeated = False):
+    def __init__(self, filename, volume = 5, repeated = False):
         """Constructs a new Sound."""
         self._filename = filename
         self._volume = volume
         self._repeated = repeated
+
 
     def get_filename(self):
         """Gets the filename for the sound.

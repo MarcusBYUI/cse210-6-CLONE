@@ -2,11 +2,14 @@ from constants import *
 from game.casting.actor import Actor
 from game.scripting.action import Action
 from game.shared.point import Point
+from game.scripting.play_sound_action import PlaySoundAction
+from game.services.raylib.raylib_audio_service import RaylibAudioService
 from game.services.keyboard_service import KeyboardService
 from game.casting.car import Car
 from game.casting.log import Log
 from game.casting.lives import Lives
 from game.casting.image import Image
+from game.casting.sound import Sound
 from game.scripting.control_chicken_action import ControlChickenAction
 from random import *
 
