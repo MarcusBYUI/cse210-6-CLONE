@@ -9,7 +9,7 @@ from random import *
 
 class Menu(Actor):
     """
-    A DISPLAY  at the beginig of the game that that handles game introduction and authors. Also does the job of gameover
+    A DISPLAY  at the begining of the game that that handles game introduction and authors. Also does the job of gameover
     screen with an extra game over text added from  the add_game_over method
     
     Attributes:
@@ -65,7 +65,7 @@ class Menu(Actor):
         self._texts.append(author1)
         
         author2 = Actor()
-        author2.set_text("Julie")
+        author2.set_text("Julie Antezana")
         author2.set_font_size(15)
 
         position = Point(250, 180)
@@ -74,7 +74,7 @@ class Menu(Actor):
         self._texts.append(author2)
         
         author3 = Actor()
-        author3.set_text("Rune")
+        author3.set_text("Rune Larsen")
         author3.set_font_size(15)
 
         position = Point(250, 220)
