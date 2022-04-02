@@ -1,6 +1,7 @@
 import os
 import pathlib
 import pyray
+from os import sep
 from game.services.audio_service import AudioService 
 
 
@@ -38,7 +39,8 @@ class RaylibAudioService(AudioService):
         filepaths = []
         for file in os.listdir(directory):
             #filename = os.path.join(directory, file)
-            filename = directory + '/' + file
+            #filename = directory + '/' + file
+            filename = directory + sep + file
             extension = pathlib.Path(filename).suffix.lower()
             if extension in filter:
                 filepaths.append(filename)
