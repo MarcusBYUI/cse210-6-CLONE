@@ -49,7 +49,7 @@ class ControlChickenAction(Action):
                     
                 else:
                     self._direction = Point(-10, 0)
-                    self._audio_service.play_sound(bounce_sound)
+                    #self._audio_service.play_sound(bounce_sound)
             
             # right
             if self._keyboard_service.is_key_down('right'):
@@ -57,7 +57,7 @@ class ControlChickenAction(Action):
                     self._direction = Point(0, 0)               
                 else:
                     self._direction = Point(10, 0)
-                    self._audio_service.play_sound(bounce_sound)
+                    #self._audio_service.play_sound(bounce_sound)
             
             # up
             if self._keyboard_service.is_key_down('up'):
@@ -65,7 +65,7 @@ class ControlChickenAction(Action):
                     self._direction = Point(0, 0)               
                 else:
                     self._direction = Point(0, -CELL_SIZE)
-                    self._audio_service.play_sound(bounce_sound)
+                    #self._audio_service.play_sound(bounce_sound)
             
 
             chicken = cast.get_first_actor("chicken")
