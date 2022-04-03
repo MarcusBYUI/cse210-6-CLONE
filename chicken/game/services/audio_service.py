@@ -1,33 +1,55 @@
-class AudioService:
-    """An audio service inteface.
+import os
+import pathlib
+import pyray
 
-    The responsibility of AudioService is to handle the audio assets for a game.
-    """
 
-    def initialize(self):
-        """Initializes underlying audio device."""
-        raise NotImplementedError("not implemented in base class")
+class RaylibAudioService():
+    """A Raylib implementation of AudioService."""
 
-    def load_sounds(self, directory):
-        """Loads all the sounds in the given directory and sub-directories.
+    def __init__(self):
+        self._sounds = {}
         
-        Args:
-            directory: A string containing the absolute folder path where sound files are stored.
-        """
-        raise NotImplementedError("not implemented in base class")
+    def initialize(self):
+        pyray.init_audio_device()
+        
+    def load_sounds(self, directory):
+        filepaths = self._get_filepaths(directory, [".wav", ".mp3", ".wma", ".aac"])
+        for filepath in filepaths:
+            sound = pyray.load_sound(filepath)
+            self._sounds[filepath] = sound
 
     def play_sound(self, sound):
-        """Plays the given sound.
+        filepath = sound.get_filename()
+        # fixed os dependent filepath
+        filepath = str(pathlib.Path(filepath))
+        volume = sound.get_volume()
+        sound = self._sounds[filepath]
+        pyray.set_sound_volume(sound, volume)
+        pyray.play_sound(sound)
         
-        Args:
-            sound: An instance of the batter.casting.Sound class.
-        """
-        raise NotImplementedError("not implemented in base class")
-
+    def stop_sound(self, sound):
+        filepath = sound.get_filename()
+        # fixed os dependent filepath
+        filepath = str(pathlib.Path(filepath))
+        volume = sound.get_volume()
+        sound = self._sounds[filepath]
+        # pyray.set_sound_volume(volume)
+        pyray.stop_sound(sound)
+    
     def release(self):
-        """Releases the underlying audio device."""
-        raise NotImplementedError("not implemented in base class")
-
+        pyray.close_audio_device()
+        
     def unload_sounds(self):
-        """Unloads all the sounds that were previously loaded."""
-        raise NotImplementedError("not implemented in base class")
+        for sound in self._sounds.values():
+            pyray.unload_sound(sound)
+        self._sounds.clear()
+        
+    def _get_filepaths(self, directory, filter):
+        filepaths = []
+        for file in os.listdir(directory):
+            filename = directory + '/' + file
+            extension = pathlib.Path(filename).suffix.lower()
+            if extension in filter:
+                filename = str(pathlib.Path(filename))
+                filepaths.append(filename)
+        return filepaths

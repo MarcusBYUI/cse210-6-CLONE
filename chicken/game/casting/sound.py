@@ -10,9 +10,8 @@ class Sound:
         self._volume = volume
         self._repeated = repeated
 
-
     def get_filename(self):
-        """Gets the filename for the sound.
+        """Gets the filename for the sound. 
         
         Returns:
             A string containing the filename.
@@ -26,6 +25,15 @@ class Sound:
             A number representing the volume.
         """
         return self._volume
+    
+    def set_volume(self, volume):
+        """Sets the volume the sound should be played at.
+        
+        args:
+            volume (float): A number representing the volume.
+        """
+        self._volume = volume
+
 
     def is_repeated(self):
         """Whether or not the sound should be repeatedly played.
